@@ -51,7 +51,7 @@ function setup(){
 	colB = random(100,255);
 	createCanvas(1000,800);
 	background(51);
-	socket = io.connect(process.env.PORT || 3000);
+	socket = io();
 	socket.on('mouse', minitialize);
 	socket.on('init', initialize);
 	socket.on('clearAll', initialize);
