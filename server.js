@@ -14,11 +14,11 @@ console.log('Server is running on port 3000.');
 for(var i = 0; i < 16; i++){
 	for(var j = 0; j < 16; j++){
 		if(i >= 8){
-			var y = i*42+30;
+			var y = i*42+20;
 		}else{
 			var y = i*42+10;
 		}
-		var x = j*42+10;
+		var x = j*42+40;
 		var r = 255;
 		var b = 255;
 		var g = 255;

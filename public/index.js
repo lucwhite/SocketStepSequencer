@@ -9,6 +9,14 @@ var colG;
 var colB;
 var keys;
 
+var notes; //Note array
+var basenote = 50; // MIDI pitch of lowest note
+// scales to build 'notes' array:
+var majorpat = [2, 2, 1, 2, 2, 2, 1]; // major scale
+var minorpat = [2, 1, 2, 2, 1, 2, 2]; // major scale
+var pentpat = [3, 2, 2, 3, 2]; // pentatonic scale
+var scalepat = majorpat;
+
 var percs = [];
 var players = [];
 
@@ -32,26 +40,69 @@ for(i=0; i<8; i++){
 //var synth = new Tone.Synth().toDestination();
 //import * from 'tone';
 
-document.getElementById('foo').addEventListener('click', async () => {
+document.getElementById('startButton').addEventListener('click', async () => {
 	console.log('audio is ready');
+	document.getElementById('startButton').style.backgroundColor = "#b3ffb3";
+	document.getElementById('startButton').style.color = "#000000";
+	document.getElementById('stopButton').style.backgroundColor = "#333333";
+	document.getElementById('stopButton').style.color = "#ffffff";
 	theloop.start();
 });
-document.getElementById('bar').addEventListener('click', async () => {
+document.getElementById('stopButton').addEventListener('click', async () => {
 	console.log('audio is stopped');
+	document.getElementById('startButton').style.backgroundColor = "#333333";
+	document.getElementById('startButton').style.color = "#ffffff";
+	document.getElementById('stopButton').style.backgroundColor = "#df5757";
+	document.getElementById('stopButton').style.color = "#ffffff";
 	theloop.stop();
 });
 document.getElementById('clearButton').addEventListener('click', async () => {
 	console.log('grid is cleared');
 	socket.emit('clearAll', null);
 });
+document.getElementById('major').addEventListener('click', async () => {
+	console.log('Major Scale');
+	scalepat = majorpat;
+	initScale();
+	document.getElementById('major').style.backgroundColor = "#99ddff";
+	document.getElementById('minor').style.backgroundColor = "#f2f2f2";
+	document.getElementById('pent').style.backgroundColor = "#f2f2f2";
+	//socket.emit('major', null);
+});
+document.getElementById('minor').addEventListener('click', async () => {
+	console.log('Minor Scale');
+	scalepat = minorpat;
+	initScale();
+	document.getElementById('major').style.backgroundColor = "#f2f2f2";
+	document.getElementById('minor').style.backgroundColor = "#99ddff";
+	document.getElementById('pent').style.backgroundColor = "#f2f2f2";
+	//socket.emit('minor', null);
+});
+document.getElementById('pent').addEventListener('click', async () => {
+	console.log('Pentatonic Scale');
+	scalepat = pentpat;
+	initScale();
+	document.getElementById('major').style.backgroundColor = "#f2f2f2";
+	document.getElementById('minor').style.backgroundColor = "#f2f2f2";
+	document.getElementById('pent').style.backgroundColor = "#99ddff";
+	//socket.emit('minor', null);
+});
 
 
 function setup(){
+	initScale();
 	colR = random(100,255);
 	colG = random(100,255);
 	colB = random(100,255);
 	createCanvas(1000,800);
 	background(51);
+	textSize(30);
+	fill(255);
+	translate(10,10);
+	rotate(radians(90));
+	text("Synth", 0,0);
+	translate(345,0);
+	text("Percussion", 0,0);
 	socket = io();
 	socket.on('mouse', minitialize);
 	socket.on('init', initialize);
@@ -75,6 +126,17 @@ function setup(){
  	theloop = new Tone.Sequence(sequenceStep, tc, "16n");
  	
 
+}
+
+function initScale(){
+	notes = new Array(8);
+	var sptr = 0;
+	notes[0] = basenote;
+	for(var j = 1;j<notes.length;j++)
+	{
+	  notes[j] = notes[j-1]+scalepat[sptr];
+	  sptr = (sptr+1) % scalepat.length;
+	}
 }
 
 function initialize(data){
@@ -101,7 +163,7 @@ function sequenceStep(time, step)
   {
     if(grid[(i*16) + step].state)
     {
-	  n.push(Tone.Midi((i*3)+50).toFrequency());
+	  n.push(Tone.Midi(notes[7-i]).toFrequency());
 	  display(grid[(i*16)+step], i*16+step);
     }
   }

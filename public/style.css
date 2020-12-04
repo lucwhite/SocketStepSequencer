@@ -1,0 +1,19 @@
+#startButton{
+    background-color:#333333;
+    color: #ffffff;
+}
+#stopButton{
+    background-color: #df5757;
+    color: #ffffff;
+}
+#clearButton{
+    background-color:#333333;
+    color: #ffffff;
+}
+#clearButton:active{
+    background-color:#f7f78d;
+    color: #000000;
+}
+#major{
+    background-color: #99ddff;
+}
