@@ -7,6 +7,7 @@ var started = false;
 var colR;
 var colG;
 var colB;
+var keys;
 
 var percs = [];
 var players = [];
@@ -79,34 +80,37 @@ function setup(){
 function initialize(data){
 	grid = data;
 	for(var h = 0; h < grid.length; h++){
-		display(grid[h]);
+		display(grid[h], h);
 	}
 	
 }
 function minitialize(data){
 	grid = data;
 	for(var h = 0; h < grid.length; h++){
-		display(grid[h]);
+		display(grid[h], h);
 	}
 	console.log('recieved');
 }
 
 function sequenceStep(time, step)
 {
+  initialize(grid);
   curstep = step;
   var n = [];
   for(var i = 0;i<8;i++)
   {
     if(grid[(i*16) + step].state)
     {
-      n.push(Tone.Midi((i*3)+50).toFrequency());
+	  n.push(Tone.Midi((i*3)+50).toFrequency());
+	  display(grid[(i*16)+step], i*16+step);
     }
   }
   for(var i = 8;i<16;i++)
   {
     if(grid[(i*16) + step].state)
     {
-      players[i-8].start();
+	  players[i-8].start();
+	  display(grid[(i*16)+step], i*16+step);
     }
   }
   keys.triggerAttackRelease(n, "4n", time, random(0.1, 0.2));
@@ -114,7 +118,7 @@ function sequenceStep(time, step)
 
 function gridChange(data){
 	for(var h = 0; h < grid.length; h++){
-		display(grid[h]);
+		display(grid[h], h);
 	}
 }
 
@@ -138,9 +142,13 @@ function draw(){
 	
 }
 
-function display(data){
+function display(data, index){
 	noStroke();
-	fill(data.colR,data.colG,data.colB);
+	if ((index%16-curstep) == 0){
+		fill(data.colR+30,data.colG+30,data.colB+30);
+	}else{
+		fill(data.colR,data.colG,data.colB);
+	}
 	rect(data.x, data.y, 40, 40);
 }
 
