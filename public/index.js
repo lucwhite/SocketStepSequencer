@@ -87,6 +87,9 @@ document.getElementById('pent').addEventListener('click', async () => {
 	document.getElementById('pent').style.backgroundColor = "#99ddff";
 	//socket.emit('minor', null);
 });
+document.getElementById('bpm').addEventListener('input', e => {
+	Tone.Transport.bpm.rampTo(+e.target.value, 0.1)
+  });
 
 
 function setup(){
@@ -123,7 +126,7 @@ function setup(){
   	// sequencer:
  	Tone.Transport.bpm.value = 120;
  	Tone.Transport.start();
- 	theloop = new Tone.Sequence(sequenceStep, tc, "16n");
+ 	theloop = new Tone.Sequence(sequenceStep, tc, "8n");
  	
 
 }
