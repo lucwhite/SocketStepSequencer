@@ -204,13 +204,21 @@ function mousePressed(){
 }
 
 function draw(){
-	
+	fill(150);
+	text('Kick',45,390);
+	text('Snare',45,432);
+	text('Low Tom',45,474); //474
+	text('Hi Tom',45,516); //516
+	text('Closed Hat',45,558); //558
+	text('Open Hat',45,600); //600
+	text('Clap',45,642); //642
+	text('Ride',45,684); //684
 }
 
 function display(data, index){
 	noStroke();
 	if ((index%16-curstep) == 0){
-		fill(data.colR+30,data.colG+30,data.colB+30);
+		fill(data.colR-30,data.colG-30,data.colB-30);
 	}else{
 		fill(data.colR,data.colG,data.colB);
 	}
