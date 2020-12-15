@@ -6,12 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  
   "author": "Lucas White",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "p5": "^1.1.9",
+    "random-username-generator": "^1.0.4",
     "socket.io": "^3.0.1",
     "tone": "^14.7.58"
   }

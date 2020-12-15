@@ -110,6 +110,7 @@ function setup(){
 	socket.on('mouse', minitialize);
 	socket.on('init', initialize);
 	socket.on('clearAll', initialize);
+	socket.on('newUser', displayUsers);
 	//Reverb
 	var freeverb = new Tone.Freeverb(0.8, 10000).toDestination();
   	freeverb.wet.value = 0.25;
@@ -205,6 +206,7 @@ function mousePressed(){
 
 function draw(){
 	fill(150);
+	textSize(30);
 	text('Kick',45,390);
 	text('Snare',45,432);
 	text('Low Tom',45,474); //474
@@ -225,3 +227,14 @@ function display(data, index){
 	rect(data.x, data.y, 40, 40);
 }
 
+function displayUsers(users){
+	fill(51);
+	rect(width-275,30,275,700);
+	fill(255);
+	textSize(20);
+	text("Online Users",width-250,40);
+	for(i = 0; i < users.length; i++){
+		//fill(users[i].r,users[i].g,users[i].b);
+		text(users[i], width-250,i*20+60);
+	}
+}

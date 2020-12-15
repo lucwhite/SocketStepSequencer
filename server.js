@@ -2,10 +2,13 @@ var express = require('express');
 var tone = require('tone');
 var socket = require('socket.io');
 var grid = [];
+var rug = require('random-username-generator');
 
 var app = express();
 var server = app.listen(process.env.PORT || 3000);
 var io = socket(server);
+
+var onlineUsers = [];
 
 app.use(express.static('public'));
 
@@ -29,10 +32,21 @@ for(var i = 0; i < 16; i++){
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
-	console.log('new connection: ' + socket.id);
+	var newUsername = rug.generate();
+	socket.username = newUsername;
+	onlineUsers.push(socket.username);
+	socket.on('disconnect', function() {
+		console.log('Got disconnect!');
+  
+		var i = onlineUsers.indexOf(socket);
+		console.log(i);
+		onlineUsers.splice(i, 1);
+		io.sockets.emit('newUser', onlineUsers);
+	 });
 	socket.on('mouse', mouseMsg);
 	socket.on('clearAll', clearMsg);
 	io.sockets.emit('init', grid);
+	io.sockets.emit('newUser', onlineUsers);
 
 	function mouseMsg(data){
 		for(var k = 0; k < grid.length; k++){
